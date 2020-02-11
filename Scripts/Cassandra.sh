@@ -1,9 +1,13 @@
+SELECT * FROM “my_keyspace_sre”.“tef”;
+SELECT * FROM “my_keyspace_sre”.“senha”;
+SELECT * FROM “my_keyspace_sre”.“limite”;
+SELECT * FROM “my_keyspace_sre”.“conta”;
+
 DROP_KEYSPACE "my_keyspace_sre";
 DROP_TABLE "my_keyspace_sre"."tef"; 
 DROP_TABLE "my_keyspace_sre"."senha";
 DROP_TABLE "my_keyspace_sre"."limite";
 DROP_TABLE "my_keyspace_sre"."conta";
-
 
 DESCRIBE KEYSPACE "my_keyspace_sre";
 DESCRIBE TABLE "my_keyspace_sre"."tef"; 
