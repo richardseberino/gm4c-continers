@@ -1,7 +1,7 @@
-SELECT * FROM ìmy_keyspace_sreî.ìtefî;
-SELECT * FROM ìmy_keyspace_sreî.ìsenhaî;
-SELECT * FROM ìmy_keyspace_sreî.ìlimiteî;
-SELECT * FROM ìmy_keyspace_sreî.ìcontaî;
+SELECT * FROM ‚Äúmy_keyspace_sre‚Äù.‚Äútef‚Äù;
+SELECT * FROM ‚Äúmy_keyspace_sre‚Äù.‚Äúsenha‚Äù;
+SELECT * FROM ‚Äúmy_keyspace_sre‚Äù.‚Äúlimite‚Äù;
+SELECT * FROM ‚Äúmy_keyspace_sre‚Äù.‚Äúconta‚Äù;
 
 DROP_KEYSPACE "my_keyspace_sre";
 DROP_TABLE "my_keyspace_sre"."tef"; 
@@ -23,15 +23,16 @@ CREATE TABLE "my_keyspace_sre"."tef"
       id_tef uuid PRIMARY KEY,
       evento text,
       tipo text,
-      agencia_origem text,
-      conta_origem text,
-      dv_origem text,
-      agencia_destino text,
-      conta_destino text,
-      dv_destino text,
+      agencia_origem int,
+      conta_origem int,
+      dv_origem int,
+      agencia_destino int,
+      conta_destino int,
+      dv_destino int,
       timestamp timestamp,
       valor decimal,
       senha text,
+      transacionId text,
       rc_simulacao text,
       msg_simulacao text,
       rc_senha text,
@@ -49,18 +50,18 @@ CREATE TABLE "my_keyspace_sre"."tef"
 CREATE TABLE "my_keyspace_sre"."senha" 
 (
       id_senha uuid PRIMARY KEY,
-      agencia text,
-      conta text,
-      dv text,
+      agencia int,
+      conta int,
+      dv int,
       senha text
  );
 
 CREATE TABLE "my_keyspace_sre"."limite" 
 (
       id_limite uuid PRIMARY KEY,
-      agencia text,
-      conta text,
-      dv text,
+      agencia int,
+      conta int,
+      dv int,
       valor_limite decimal,
       valor_utilizado decimal,
       timestamp_limite text
@@ -69,9 +70,9 @@ CREATE TABLE "my_keyspace_sre"."limite"
 CREATE TABLE "my_keyspace_sre"."conta" 
 (
       id_conta uuid PRIMARY KEY,
-      agencia text,
-      conta text,
-      dv text,
+      agencia int,
+      conta int,
+      dv int,
       valor_saldo decimal,
       bloqueio int
  );
@@ -90,6 +91,7 @@ INSERT INTO "my_keyspace_sre"."tef"
       timestamp,
       valor,
       senha,
+      transacionId,
       rc_simulacao,
       msg_simulacao,
       rc_senha,
@@ -108,15 +110,16 @@ VALUES
       uuid(),
       'simulacao',
       'TEF_CC_CC',
-      '1234',
-      '98765',
-      '0',
-      '1234',
-      '98765',
-      '0',
+      1234,
+      98765,
+      0,
+      1234,
+      98765,
+      0,
       '2020-02-10 09:00:00.000',
       100.00,
       'MTIzNDU2',
+      'tef123456',
       '99',
       'XXX',
       '99',
