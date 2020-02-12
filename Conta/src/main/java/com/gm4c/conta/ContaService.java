@@ -6,13 +6,17 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-
+import com.gm4c.conta.dto.ContaCorrenteDto;
+import com.gm4c.conta.dto.ContaRepositorio;
 import com.gm4c.tef.Transferencia;
 import com.google.gson.Gson;
 
 @Service
 public class ContaService {
 
+	@Autowired
+	ContaRepositorio rep;
+	
 	@Autowired
 	private final KafkaTemplate<String, ContaCorrente> kafkaConta;
 
@@ -32,17 +36,56 @@ public class ContaService {
 		boolean aprovadoOrigem = true;
 		boolean aprovadoDestino = true;
 		
-		
-		
+		System.out.println("transferencia " + transferencia);
+		ContaCorrenteDto contaDestino=null;
+		ContaCorrenteDto contaOrigem=null;
 
-		
+		//verificando conta origem
+		try
+		{
+			contaOrigem = rep.pesquisaPorAgenciaConta(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0);
+		}
+		catch (Exception e)
+		{
+			aprovadoOrigem = false;
+		}
+		//verificando conta destino
+		try
+		{
+			contaDestino = rep.pesquisaPorAgenciaConta(transferencia.getAgenciaDestino(), transferencia.getContaDestino(), transferencia.getDvDestino()).get(0);
+			
+		}
+		catch (Exception e)
+		{
+			aprovadoDestino = false;
+		}
+
 		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
 		{
-			/** @TODO colocar a inteligencia para atualizar o saldo **/
+			if (contaOrigem!=null && contaDestino!=null)
+			{
+				contaOrigem.setValor_saldo(contaOrigem.getValor_saldo()-transferencia.getValor());
+				contaDestino.setValor_saldo(contaDestino.getValor_saldo()+transferencia.getValor());
+				rep.save(contaOrigem);
+				rep.save(contaDestino);
+				
+			}
 		}
 		else //simulacao
 		{
-			/** @TODO colocar a lógica para validar a conta origem e destino **/
+			
+			if (contaOrigem ==null || contaOrigem.getBloqueio()==1 || contaOrigem.getValor_saldo()< transferencia.getValor())
+			{
+				aprovadoOrigem=false;
+				
+			}
+			
+			if (contaDestino == null || contaDestino.getBloqueio()==1 )
+			{
+				aprovadoDestino=false;
+				
+			}
+
 		}
 
 		

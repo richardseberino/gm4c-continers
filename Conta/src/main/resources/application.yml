@@ -35,11 +35,11 @@ spring:
   data:
     cassandra:
       contact-points: 127.0.0.1
-      username: 
-      password: 
+      username: cassandra
+      password: cassandra
       keyspace-name: itau
       port: 9042
-      schema-action: create_if_not_exists
+      schema-action: CREATE_IF_NOT_EXISTS
 logging:
   level:
     root: info     
