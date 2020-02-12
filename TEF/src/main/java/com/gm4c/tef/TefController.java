@@ -4,18 +4,22 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gm4c.limite.Limite;
 import com.gm4c.tef.dto.RequestSimulacaoTefDto;
 import com.gm4c.tef.dto.ResultadoSimulacaoTefDto;
+import com.google.gson.Gson;
 
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 
@@ -55,12 +59,9 @@ public class TefController {
 				.setSenha(simulacao.getSenha())
 				.setIdTranscao(idTrandacao)
 				.build();
-		
-		//produz o registro do avro para ser enviado ao Kafka
-		ProducerRecord<String, Simulacao> prodRecord = new ProducerRecord<String, Simulacao>(topico, simulaAvro);
-		
+				
 		//envia a mensagem ao kafka
-		kafkaSimulacao.send(prodRecord);
+		kafkaSimulacao.send(topico, simulaAvro);
 		
 		//Prepara resultado
 		ResultadoSimulacaoTefDto resultado = new ResultadoSimulacaoTefDto();
@@ -75,6 +76,22 @@ public class TefController {
 		resultado.setId_transacao(idTrandacao);
 		
 		return ResponseEntity.ok(resultado);
+	}
+	
+	@KafkaListener(topics="limite", groupId = "simulacao")
+	public void validaLimite(ConsumerRecord<String, Limite> record)
+	{
+		Object t1 = record.value();
+		Limite limite = new Gson().fromJson(t1.toString(), Limite.class);
+		
+		if (limite.getAprovado())
+		{
+			System.out.println("Limite aprovado!");
+		}
+		else
+		{
+			System.out.println("Limite insuficiente");
+		}
 	}
 	
 }
