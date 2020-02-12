@@ -12,8 +12,6 @@ docker exec -ti kafka bash
 
 kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic tef
 
-ZZZ Deletar: kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic tef
-
 kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic senha
 
 kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic conta
