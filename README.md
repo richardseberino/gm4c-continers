@@ -166,3 +166,8 @@ INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 28, 0, 100.00, 0);
 
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 29, 0, 100.00, 0);
+
+SELECT * FROM tef;
+SELECT * FROM senha;
+SELECT * FROM limite;
+SELECT * FROM conta;
