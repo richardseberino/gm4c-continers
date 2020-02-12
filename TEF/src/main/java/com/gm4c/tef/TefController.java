@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gm4c.conta.ContaCorrente;
 import com.gm4c.limite.Limite;
+import com.gm4c.senha.Senha;
 import com.gm4c.tef.dto.RequestSimulacaoTefDto;
 import com.gm4c.tef.dto.ResultadoSimulacaoTefDto;
 import com.google.gson.Gson;
@@ -28,9 +30,9 @@ import io.confluent.kafka.serializers.KafkaAvroSerializer;
 public class TefController {
 
 	@Autowired
-	private final KafkaTemplate<String, Simulacao> kafkaSimulacao;// = new KafkaProducer<String, Simulacao>(propriedades);
+	private final KafkaTemplate<String, Transferencia> kafkaSimulacao;// = new KafkaProducer<String, Simulacao>(propriedades);
 	
-	public TefController(KafkaTemplate<String, Simulacao> kafka)
+	public TefController(KafkaTemplate<String, Transferencia> kafka)
 	{
 		this.kafkaSimulacao = kafka;
 	}
@@ -47,7 +49,8 @@ public class TefController {
 		String topico = "simulacao";
 		
 		//cria o objeto do Avro com a mensagem do evento de simulacao
-		Simulacao simulaAvro = Simulacao.newBuilder()
+		Transferencia simulaAvro = Transferencia.newBuilder()
+				.setEvento("simulacao")
 				.setAgenciaOrigem(simulacao.getAgencia_origem())
 				.setContaOrigem(simulacao.getConta_origem())
 				.setDvOrigem(simulacao.getDv_origem())
@@ -62,6 +65,9 @@ public class TefController {
 				
 		//envia a mensagem ao kafka
 		kafkaSimulacao.send(topico, simulaAvro);
+		
+		
+		/** @TODO implementar a logica para aguardar o resultado da senha, conta e limite para preprar o resultado **/
 		
 		//Prepara resultado
 		ResultadoSimulacaoTefDto resultado = new ResultadoSimulacaoTefDto();
@@ -93,5 +99,48 @@ public class TefController {
 			System.out.println("Limite insuficiente");
 		}
 	}
+
+	
+	@KafkaListener(topics="conta", groupId = "simulacao")
+	public void validaConta(ConsumerRecord<String, ContaCorrente> record)
+	{
+		Object t1 = record.value();
+		ContaCorrente conta = new Gson().fromJson(t1.toString(), ContaCorrente.class);
+		
+		if (conta.getAprovacaoContaOrigem())
+		{
+			System.out.println("Conta Origem aprovada!");
+		}
+		else
+		{
+			System.out.println("Conta Origem reprovada, razao: " + conta.getMotivoContaOrigem());
+		}
+		if (conta.getAprovacaoContaDestino())
+		{
+			System.out.println("Conta Destino aprovada!");
+		}
+		else
+		{
+			System.out.println("Conta Destino reprovada, razao: " + conta.getMotivoContaDestino());
+		}
+	}
+
+	
+	@KafkaListener(topics="senha", groupId = "simulacao")
+	public void validaSenha(ConsumerRecord<String, Senha> record)
+	{
+		Object t1 = record.value();
+		Senha senha = new Gson().fromJson(t1.toString(), Senha.class);
+		
+		if (senha.getAprovado())
+		{
+			System.out.println("Senha Validada!");
+		}
+		else
+		{
+			System.out.println("Senha incorreta");
+		}
+	}
+	
 	
 }

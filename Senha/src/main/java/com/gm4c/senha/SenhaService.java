@@ -1,5 +1,4 @@
-package com.gm4c.limite;
-
+package com.gm4c.senha;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,45 +11,45 @@ import com.gm4c.tef.Transferencia;
 import com.google.gson.Gson;
 
 @Service
-public class LimiteService {
+public class SenhaService {
 
 	@Autowired
-	private final KafkaTemplate<String, Limite> kafkaLimite;// = new KafkaProducer<String, Simulacao>(propriedades);
+	private final KafkaTemplate<String, Senha> kafkaSenha;
 
 
-	public LimiteService(KafkaTemplate<String, Limite> k1)
+	public SenhaService(KafkaTemplate<String, Senha> k1)
 	{
-		this.kafkaLimite = k1;
+		this.kafkaSenha = k1;
 	}
 	
-	@KafkaListener(topics="simulacao", groupId = "limite")
+	@KafkaListener(topics="simulacao", groupId = "senha")
 	public void validaLimite(ConsumerRecord<String, Transferencia> record)
 	{
 		Object t1 = record.value();
 		Transferencia transferencia = new Gson().fromJson(t1.toString(), Transferencia.class);
 
-		
+		//verifica se for efetivação, não faz nada
+		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
+		{
+			return;
+		}
 		boolean aprovado = true;
 		
-		/** @TODO colocar a lógica para vlidar o limite **/
+		/** @TODO colocar a lógica para validar a senha **/
 		
-		//prepara o registro do avro sobre o retorno do limite
-		Limite limite = Limite.newBuilder()
+		//prepara o registro do avro sobre o retorno da senha
+		Senha senha = Senha.newBuilder()
 				.setAgencia(transferencia.getAgenciaOrigem())
 				.setConta(transferencia.getContaOrigem())
 				.setDv(transferencia.getDvOrigem())
-				.setValor(transferencia.getValor())
 				.setAprovado(aprovado)
 				.build();
 		
-		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
-		{
-			/** @TODO colocar a inteligencia para atualizar o limote **/
-		}
 		
-		//envia a respota do limite para o kafka no topico limite
-		kafkaLimite.send("limite", limite);
+		//envia a respota da senha para o kafka no topico senha
+		kafkaSenha.send("senha", senha);
 		
 	}
-		
+
+	
 }

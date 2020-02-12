@@ -1,0 +1,18 @@
+{
+     "type": "record",
+     "namespace": "com.gm4c.conta",
+     "name": "ContaCorrente",
+     "version": "1",
+     "fields": [
+       { "name": "agencia_origem", "type": "int", "doc": "Codigo da agencia de origem" },
+       { "name": "conta_origem", "type": "int", "doc": "Codigo da conta de origem" },
+       { "name": "dv_origem", "type": "int", "doc": "Dac da conta de origem" },
+       { "name": "agencia_destino", "type": "int", "doc": "Codigo da agencia de destino" },
+       { "name": "conta_destino", "type": "int", "doc": "Codigo da conta de destino" },
+       { "name": "dv_destino", "type": "int", "doc": "dac da conta de destino" },
+       { "name": "aprovacao_conta_origem", "type": "boolean", "doc": "se a conta origem foi ou nao aprovada" },
+       { "name": "motivo_conta_origem", "type": "string", "doc": "codigo de retorno da conta origem" },
+       { "name": "aprovacao_conta_destino", "type": "boolean", "doc": "se a conta origem foi ou nao aprovada" },
+       { "name": "motivo_conta_destino", "type": "string", "doc": "codigo de retorno da conta origem" }
+     ]
+}

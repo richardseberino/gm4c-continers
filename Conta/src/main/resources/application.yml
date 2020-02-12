@@ -1,0 +1,37 @@
+server:
+  port: 9002
+spring:
+  kafka:
+    bootstrap-servers:
+      - localhost:9092  
+    properties:
+      acks: 1
+      request.timeout.ms: 20000
+      retry.backoff.ms: 500
+      schema.registry.url: http://localhost:8081  
+      specific: 
+        avro: 
+          reader: true
+    consumer:
+      auto-offset-reset: earliest
+      bootstrap-servers: localhost:9092
+      group-id: simulacao3
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      enable-auto-commit: true
+      properties:
+        acks: 1
+        schema:
+          registry:
+            url: http://localhost:8081
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema:
+          registry:
+            url: http://localhost:8081
+logging:
+  level:
+    root: info     
