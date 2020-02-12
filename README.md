@@ -23,7 +23,7 @@ kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partit
 # Cassandra
 
 ## Cria o container do cassandra
-docker run --name cassandra -p 7000:7000 -d cassandra:latest
+docker run --name cassandra -p 7000:7000 -p 9042:9042 -d cassandra:latest
 
 ## entra no container do casandra 
 docker exec -it cassandra bash
