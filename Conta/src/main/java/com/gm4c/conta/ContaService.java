@@ -32,7 +32,19 @@ public class ContaService {
 		boolean aprovadoOrigem = true;
 		boolean aprovadoDestino = true;
 		
-		/** @TODO colocar a lógica para validar a conta origem e destino **/
+		
+		
+
+		
+		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
+		{
+			/** @TODO colocar a inteligencia para atualizar o saldo **/
+		}
+		else //simulacao
+		{
+			/** @TODO colocar a lógica para validar a conta origem e destino **/
+		}
+
 		
 		//prepara o registro do avro sobre o retorno das contas
 		ContaCorrente conta = ContaCorrente.newBuilder()
@@ -47,11 +59,6 @@ public class ContaService {
 				.setAprovacaoContaDestino(aprovadoDestino)
 				.setMotivoContaDestino("0")
 				.build();
-		
-		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
-		{
-			/** @TODO colocar a inteligencia para atualizar o limote **/
-		}
 		
 		//envia a respota do limite para o kafka no topico conta
 		kafkaConta.send("conta", conta);

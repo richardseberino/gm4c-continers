@@ -28,11 +28,21 @@ public class LimiteService {
 	{
 		Object t1 = record.value();
 		Transferencia transferencia = new Gson().fromJson(t1.toString(), Transferencia.class);
-
+		
+		
+		
+		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
+		{
+			/** @TODO colocar a inteligencia para atualizar o limote **/
+		}
+		else
+		{
+			/** @TODO colocar a lógica para vlidar o limite **/
+		}
 		
 		boolean aprovado = true;
 		
-		/** @TODO colocar a lógica para vlidar o limite **/
+		
 		
 		//prepara o registro do avro sobre o retorno do limite
 		Limite limite = Limite.newBuilder()
@@ -43,10 +53,7 @@ public class LimiteService {
 				.setAprovado(aprovado)
 				.build();
 		
-		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
-		{
-			/** @TODO colocar a inteligencia para atualizar o limote **/
-		}
+
 		
 		//envia a respota do limite para o kafka no topico limite
 		kafkaLimite.send("limite", limite);
