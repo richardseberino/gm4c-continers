@@ -6,12 +6,16 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-
+import com.gm4c.senha.dto.SenhaDto;
+import com.gm4c.senha.dto.SenhaRepositorio;
 import com.gm4c.tef.Transferencia;
 import com.google.gson.Gson;
 
 @Service
 public class SenhaService {
+
+	@Autowired
+	SenhaRepositorio repZ;
 
 	@Autowired
 	private final KafkaTemplate<String, Senha> kafkaSenha;
@@ -22,23 +26,39 @@ public class SenhaService {
 		this.kafkaSenha = k1;
 	}
 	
-	@KafkaListener(topics="simulacao", groupId = "senha")
-	public void validaLimite(ConsumerRecord<String, Transferencia> record)
+	@KafkaListener(topics="tef", groupId = "senha")
+	public void validaSenha(ConsumerRecord<String, Transferencia> record)
 	{
 		Object t1 = record.value();
 		Transferencia transferencia = new Gson().fromJson(t1.toString(), Transferencia.class);
 
-		//verifica se for efetivação, não faz nada
+		//verifica se for efetivacao, não faz nada
 		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
 		{
 			return;
 		}
 		boolean aprovado = true;
 		
-		/** @TODO colocar a lógica para validar a senha **/
+		SenhaDto senha=null;
+
+		//verificando agencia conta e dv  (busca o registro pelos 3 campos>
+		try
+		{
+			senha = repZ.pesquisaPorAgenciaConta(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0);
+		}
+		catch (Exception e)
+		{
+			aprovado = false;
+		}
+		
+		
+		if (senha.getSenha()!=transferencia.getSenha())
+		{
+			aprovado = false;
+		}
 		
 		//prepara o registro do avro sobre o retorno da senha
-		Senha senha = Senha.newBuilder()
+		Senha senhaResp = Senha.newBuilder()
 				.setAgencia(transferencia.getAgenciaOrigem())
 				.setConta(transferencia.getContaOrigem())
 				.setDv(transferencia.getDvOrigem())
@@ -47,9 +67,7 @@ public class SenhaService {
 		
 		
 		//envia a respota da senha para o kafka no topico senha
-		kafkaSenha.send("senha", senha);
+		kafkaSenha.send("senha", senhaResp);
 		
 	}
-
-	
 }
