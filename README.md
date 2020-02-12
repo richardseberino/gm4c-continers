@@ -47,64 +47,121 @@ CREATE TABLE conta (id_conta uuid PRIMARY KEY, agencia int, conta int, dv int, v
 
 ## popula as tabeleas
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 10, 10, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 10, 11, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 10, 12, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 10, 13, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 10, 14, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 10, 15, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 10, 16, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 10, 17, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 10, 18, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 10, 19, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 20, 20, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 20, 21, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 20, 22, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 20, 23, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 20, 24, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 20, 25, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 20, 26, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 20, 27, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 20, 28, 0, '123456');
+
 INSERT INTO senha(id_senha, agencia, conta, dv, senha) VALUES (uuid(), 20, 29, 0, '123456');
 
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),10, 10, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),10, 11, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),10, 12, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),10, 13, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),10, 14, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),10, 15, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),10, 16, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),10, 17, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),10, 18, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),10, 19, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),20, 20, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),20, 21, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),20, 22, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),20, 23, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),20, 24, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),20, 25, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),20, 26, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),20, 27, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),20, 28, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
+
 INSERT INTO limite (id_limite, agencia, conta, dv, valor_limite, valor_utilizado, timestamp_limite) VALUES (uuid(),20, 29, 0, 100.00, 100.00, '2020-02-10 09:00:00.000');
 
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 10, 10, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 10, 11, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 10, 12, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 10, 13, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 10, 14, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 10, 15, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 10, 16, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 10, 17, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 10, 18, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 10, 19, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 20, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 21, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 22, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 23, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 24, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 25, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 26, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 27, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 28, 0, 100.00, 0);
+
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 29, 0, 100.00, 0);
