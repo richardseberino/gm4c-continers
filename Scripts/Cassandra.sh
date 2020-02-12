@@ -3,11 +3,11 @@ SELECT * FROM “my_keyspace_sre”.“senha”;
 SELECT * FROM “my_keyspace_sre”.“limite”;
 SELECT * FROM “my_keyspace_sre”.“conta”;
 
-DROP_KEYSPACE "my_keyspace_sre";
-DROP_TABLE "my_keyspace_sre"."tef"; 
-DROP_TABLE "my_keyspace_sre"."senha";
-DROP_TABLE "my_keyspace_sre"."limite";
-DROP_TABLE "my_keyspace_sre"."conta";
+DROP KEYSPACE "my_keyspace_sre";
+DROP TABLE "my_keyspace_sre"."tef"; 
+DROP TABLE "my_keyspace_sre"."senha";
+DROP TABLE "my_keyspace_sre"."limite";
+DROP TABLE "my_keyspace_sre"."conta";
 
 DESCRIBE KEYSPACE "my_keyspace_sre";
 DESCRIBE TABLE "my_keyspace_sre"."tef"; 
@@ -145,10 +145,10 @@ INSERT INTO "my_keyspace_sre"."senha"
 VALUES 
 (
       uuid(),
-      '1234',
-      '98765',
-      '0',
-      'MTIzNDU2'
+      1234,
+      98765,
+      0,
+      '123456'
 );
 
 
@@ -165,9 +165,9 @@ INSERT INTO "my_keyspace_sre"."limite"
 VALUES 
 (
       uuid(),
-      '1234',
-      '98765',
-      '0',
+      1234,
+      98765,
+      0,
       100.00,
       100.00,
       '2020-02-10 09:00:00.000'
@@ -186,9 +186,9 @@ INSERT INTO "my_keyspace_sre"."conta"
 VALUES 
 (
       uuid(),
-      '1234',
-      '98765',
-      '0',
+      1234,
+      98765,
+      0,
       100.00,
       0
  );
