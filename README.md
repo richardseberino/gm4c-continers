@@ -238,6 +238,7 @@ ATENÇÃO!!! Executar Sempre:
 5. Para subir uma alteração:
 
 git add /c/users/{usuario}/git/gm4c/{arquivo}
+
 Ou git 
 
 add {diretorio}/src/main/java/com/gm4c/{xxx}/dto/{xxxRepositorio.java}
