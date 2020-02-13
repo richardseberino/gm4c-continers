@@ -31,7 +31,8 @@ public class SenhaService {
 	{
 		Object t1 = record.value();
 		Transferencia transferencia = new Gson().fromJson(t1.toString(), Transferencia.class);
-
+	
+		
 		//verifica se for efetivacao, não faz nada
 		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
 		{
@@ -52,7 +53,7 @@ public class SenhaService {
 		}
 		
 		
-		if (senha.getSenha()!=transferencia.getSenha())
+		if (senha!=null && senha.getSenha()!=transferencia.getSenha())
 		{
 			aprovado = false;
 		}
@@ -63,6 +64,7 @@ public class SenhaService {
 				.setConta(transferencia.getContaOrigem())
 				.setDv(transferencia.getDvOrigem())
 				.setAprovado(aprovado)
+				.setIdSimulacao(transferencia.getIdTransacao())
 				.build();
 		
 		
