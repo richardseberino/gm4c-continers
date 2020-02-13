@@ -34,26 +34,35 @@ public class LimiteService {
 		Object t1 = record.value();
 		Transferencia transferencia = new Gson().fromJson(t1.toString(), Transferencia.class);
 		
-		// Malvaro 13/02
-		Double valortef, valordisponivel;
-		
-		LimiteDto dadosLimite = null;
-//		dadosLimite = replimite.pesquisaLimite(transferencia.getAgenciaOrigem(),transferencia.getContaOrigem(), transferencia.getDvOrigem());
-
-		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
-		{
-			/** @TODO colocar a inteligencia para atualizar o limite **/
-		}
-		else
-		{
-			/** @TODO colocar a lógica para validar o limite **/
-			
-			
-		}
-		
 		boolean aprovado = true;
-		
-		
+
+		LimiteDto dadosLimite = null;
+
+		try 
+		{
+			dadosLimite = replimite.pesquisaLimite(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0); 
+			if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
+			{
+				dadosLimite.setValor_utilizado(dadosLimite.getValor_utilizado()+transferencia.getValor());
+				replimite.save(dadosLimite);
+			}
+			else //simulacao
+			{
+				if  ((dadosLimite.getValor_limite()- dadosLimite.getValor_utilizado())>=transferencia.getValor())
+				{
+					aprovado = true;
+				} else
+				{
+					aprovado = false;
+				}
+			}
+
+		}
+		catch (Exception e)
+		{ 
+			aprovado = false;
+		}
+
 		
 		//prepara o registro do avro sobre o retorno do limite
 		Limite limite = Limite.newBuilder()
@@ -61,6 +70,7 @@ public class LimiteService {
 				.setConta(transferencia.getContaOrigem())
 				.setDv(transferencia.getDvOrigem())
 				.setValor(transferencia.getValor())
+				.setIdSimulacao(transferencia.getIdTransacao())
 				.setAprovado(aprovado)
 				.build();
 		
