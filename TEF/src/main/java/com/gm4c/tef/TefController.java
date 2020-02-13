@@ -85,9 +85,8 @@ public class TefController {
 				agora = new Date();
 				if (agora.getTime()-inicio.getTime()>10000)
 				{
-					throw new Exception("[-3] timeout!");
+						throw new Exception("[-3] timeout!");
 				}
-
 				Thread.sleep(500);
 			}
 			List<TefDto> list = repTef.findByTransactionid(id_simulacao);
@@ -164,7 +163,7 @@ public class TefController {
 	{
 		
 		String idTransacao = UUID.randomUUID().toString();
-
+		
 		//Define o topico onde o evento de simulacao será gravado
 		String topico = "tef";
 		
@@ -262,8 +261,11 @@ public class TefController {
 			sim.setRc_simulacao(e.getMessage());
 			sim.setMsg_simulacao("Timeout, transacao demorou para receber retorno de senha,limmite e conta");
 			sim = repTef.findByTransactionid(idTransacao).get(0);
+			System.out.println("ZZZ001");
+			System.out.println("ZZZ001+" + e.getMessage());
 		}
 		
+		System.out.println("ZZZ002");
 		repTef.save(sim);
 		//Prepara resultado
 		ResultadoSimulacaoTefDto resultado = new ResultadoSimulacaoTefDto();
@@ -276,6 +278,7 @@ public class TefController {
 		resultado.setTipo_transacao(simulacao.getTipo_transacao());
 		resultado.setValor(simulacao.getValor());
 		resultado.setId_transacao(idTransacao);
+		System.out.println("ZZZ003" + sim.getRc_simulacao());
 		resultado.setResultado(sim.getRc_simulacao());
 		
 		return ResponseEntity.ok(resultado);
@@ -298,6 +301,12 @@ public class TefController {
 		}
 		
 		TefDto ev = lista.get(0);
+		System.out.println("##########################");
+		System.out.println("getRc_credito " + ev.getRc_credito());
+		System.out.println("getRc_debito  " + ev.getRc_debito());
+		System.out.println("getRc_limite  " + ev.getRc_limite());
+		System.out.println("getRc_senha   " + ev.getRc_senha());
+		System.out.println("##########################");
 		
 		if (evento.equalsIgnoreCase("simulacao"))
 		{
@@ -380,9 +389,13 @@ public class TefController {
 	public void validaSenha(ConsumerRecord<String, Senha> record)
 	{
 		Object t1 = record.value();
+		System.out.println("ZZZ001");
 		Senha senha = new Gson().fromJson(t1.toString(), Senha.class);
+		System.out.println("ZZZ002" + senha);
 		
 		java.util.List<TefDto> lista= repTef.findByTransactionid(senha.getIdSimulacao());
+		System.out.println("ZZZ003" + senha.getIdSimulacao());
+		System.out.println("ZZZ004" + senha.getEvento());
 		
 		//verifica se existe uma simulacao em andamento com esse id
 		if (lista.size()<=0)
@@ -391,6 +404,7 @@ public class TefController {
 		}
 		TefDto simulacao = lista.get(0);
 		
+		System.out.println("ZZZ005"+senha.getAprovado());
 		if (senha.getAprovado())
 		{
 			simulacao.setMsg_senha("Senha correta");

@@ -45,6 +45,8 @@ public class ContaService {
 		//verificando conta origem
 		try
 		{
+			Thread.sleep(200);
+
 			contaOrigem = repConta.pesquisaPorAgenciaConta(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0);
 		}
 		catch (Exception e)
@@ -86,12 +88,12 @@ public class ContaService {
 			else if (contaOrigem.getBloqueio()==1)
 			{
 				aprovadoOrigem=false;
-				razaoOrigem = "[-11] Conta Origam bloqueada";
+				razaoOrigem = "[-11] Conta Origem bloqueada";
 			}
 			else if (contaOrigem.getValor_saldo()<transferencia.getValor())
 			{
 				aprovadoOrigem=false;
-				razaoOrigem = "[-12] Conta Origam bloqueada";
+				razaoOrigem = "[-12] Conta Origem bloqueada";
 			}
 			
 			if (contaDestino == null) 

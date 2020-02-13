@@ -45,6 +45,8 @@ public class SenhaService {
 		//verificando agencia conta e dv  (busca o registro pelos 3 campos>
 		try
 		{
+//			Thread.sleep(400);
+
 			senha = repSenha.pesquisaPorAgenciaConta(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0);
 		}
 		catch (Exception e)
@@ -67,12 +69,15 @@ public class SenhaService {
 				.setConta(transferencia.getContaOrigem())
 				.setDv(transferencia.getDvOrigem())
 				.setAprovado(aprovado)
+				.setEvento(transferencia.getEvento())
 				.setIdSimulacao(transferencia.getIdTransacao())
 				.build();
 		
 		
 		//envia a respota da senha para o kafka no topico senha
+		System.out.println("ZZZ999");
 		kafkaSenha.send("senha", senhaResp);
+		System.out.println("ZZZ998");
 		
 	}
 }

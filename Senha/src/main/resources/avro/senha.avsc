@@ -8,6 +8,7 @@
        { "name": "agencia", "type": "int", "doc": "Codigo da agencia de origem" },
        { "name": "conta", "type": "int", "doc": "Codigo da conta de origem" },
        { "name": "dv", "type": "int", "doc": "Dac da conta de origem" },
-       { "name": "aprovado", "type": "boolean", "doc": "Retorna verdadeiro se a senha estiver correta" }
+       { "name": "aprovado", "type": "boolean", "doc": "Retorna verdadeiro se a senha estiver correta" },
+       { "name": "evento", "type": "string", "doc": "Retorna o tipo de evento" }
      ]
 }

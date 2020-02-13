@@ -40,10 +40,13 @@ public class LimiteService {
 
 		try 
 		{
+			Thread.sleep(300);
+
 			dadosLimite = replimite.pesquisaLimite(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0); 
 			if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
 			{
 				dadosLimite.setValor_utilizado(dadosLimite.getValor_utilizado()+transferencia.getValor());
+				System.out.println("Novo Limite"+ dadosLimite.getValor_utilizado()+transferencia.getValor());
 				replimite.save(dadosLimite);
 			}
 			else //simulacao
@@ -63,7 +66,6 @@ public class LimiteService {
 			aprovado = false;
 		}
 
-		
 		//prepara o registro do avro sobre o retorno do limite
 		Limite limite = Limite.newBuilder()
 				.setAgencia(transferencia.getAgenciaOrigem())
