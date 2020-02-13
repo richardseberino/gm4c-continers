@@ -168,20 +168,51 @@ public class TefController {
 
 		Date inicio = new Date();
 		Date agora = new Date();
-		
-		while (!verificaEtapa(idTransacao, "simulacao")) 
+		try
 		{
-			agora = new Date();
-			if (agora.compareTo(inicio)>20000)
+			while (!verificaEtapa(idTransacao, "simulacao")) 
 			{
-				
+				agora = new Date();
+				if (agora.compareTo(inicio)>20000)
+				{
+					throw new Exception("[-3] timeout!");
+				}
+
+				Thread.sleep(500);
 			}
+			List<TefDto> list = repTef.findByTransactionid(idTransacao);
+			if (list.isEmpty())
+			{
+				throw new Exception("[-4] Falha ao atualizar a simulacao");
+			}
+			sim = list.get(0);
+			
+			if (!sim.getRc_debito().startsWith("[0]"))
+			{
+				throw new Exception("[-5] falha na consta origem. " + sim.getRc_credito());
+			}
+			if (!sim.getRc_credito().startsWith("[0]"))
+			{
+				throw new Exception("[-6] falha na consta destino. " + sim.getRc_credito());
+			}
+			if (!sim.getRc_limite().startsWith("[0]"))
+			{
+				throw new Exception("[-7] limite recusado. "  + sim.getRc_limite());
+			}
+			if (!sim.getRc_senha().startsWith("[0]"))
+			{
+				throw new Exception("[-8] limite senha invalida. "  + sim.getRc_senha());
+			}
+			sim.setRc_simulacao("[0] Simulacao concluida");
+
+		}
+		catch (Exception e)
+		{
+			sim.setRc_simulacao(e.getMessage());
+			sim.setMsg_simulacao("Timeout, transacao demorou para receber retorno de senha,limmite e conta");
+			
 		}
 		
-		
-		
-		
-		sim.setRc_simulacao("[0] Simulacao concluida");
 		repTef.save(sim);
 		//Prepara resultado
 		ResultadoSimulacaoTefDto resultado = new ResultadoSimulacaoTefDto();
@@ -194,6 +225,7 @@ public class TefController {
 		resultado.setTipo_transacao(simulacao.getTipo_transacao());
 		resultado.setValor(simulacao.getValor());
 		resultado.setId_transacao(idTransacao);
+		resultado.setResultado(sim.getRc_simulacao());
 		
 		return ResponseEntity.ok(resultado);
 	}

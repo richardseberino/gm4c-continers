@@ -13,7 +13,15 @@ public class ResultadoSimulacaoTefDto {
 	private String tipo_transacao;
 	private String id_transacao;
 	private float valor;
+	private String resultado;
 	
+	
+	public String getResultado() {
+		return resultado;
+	}
+	public void setResultado(String resultado) {
+		this.resultado = resultado;
+	}
 	public float getValor() {
 		return valor;
 	}

@@ -35,8 +35,8 @@ public class ContaService {
 		
 		boolean aprovadoOrigem = true;
 		boolean aprovadoDestino = true;
-		String razaoOrigem = "[5] Conta Origem verificada e saldo suficiente";
-		String razaoDestino = "[5] Conta Destino verificada";
+		String razaoOrigem = "[0] Conta Origem verificada e saldo suficiente";
+		String razaoDestino = "[0] Conta Destino verificada";
 		
 		System.out.println("transferencia " + transferencia);
 		ContaCorrenteDto contaDestino=null;
@@ -70,8 +70,8 @@ public class ContaService {
 				contaDestino.setValor_saldo(contaDestino.getValor_saldo()+transferencia.getValor());
 				repConta.save(contaOrigem);
 				repConta.save(contaDestino);
-				razaoOrigem = "[50] Debito realizado com sucesso na conta origem!";
-				razaoDestino = "[60] Credito realizado com sucesso na conta destino";
+				razaoOrigem = "[0] Debito realizado com sucesso na conta origem!";
+				razaoDestino = "[0] Credito realizado com sucesso na conta destino";
 				
 			}
 		}
