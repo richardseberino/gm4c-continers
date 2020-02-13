@@ -2,6 +2,7 @@ package com.gm4c.tef;
 
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -165,8 +166,17 @@ public class TefController {
 		
 		/** @TODO implementar a logica para aguardar o resultado da senha, conta e limite para preprar o resultado **/
 
+		Date inicio = new Date();
+		Date agora = new Date();
 		
-		
+		while (!verificaEtapa(idTransacao, "simulacao")) 
+		{
+			agora = new Date();
+			if (agora.compareTo(inicio)>20000)
+			{
+				
+			}
+		}
 		
 		
 		
@@ -188,6 +198,12 @@ public class TefController {
 		return ResponseEntity.ok(resultado);
 	}
 	
+	/**
+	 * metodo resposnavel por verificar se uma etapa (efetivacao ou simulacao) já foi concluida
+	 * @param idSimulacao id da simulacao
+	 * @param evento tipo de evento (simulacao ou efetivacao)
+	 * @return true quando a etapa estiver concluida e false quando nao
+	 */
 	private boolean verificaEtapa(String idSimulacao, String evento)
 	{
 
@@ -215,7 +231,6 @@ public class TefController {
 			}
 			
 		}
-		
 		
 		return false;
 	}
