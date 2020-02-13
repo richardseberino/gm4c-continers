@@ -120,7 +120,7 @@ public class ContaService {
 				.setDvDestino(transferencia.getDvDestino())
 				.setAprovacaoContaDestino(aprovadoDestino)
 				.setMotivoContaDestino(razaoDestino)
-				.setIdSimulacao(transferencia.getIdTranscao())
+				.setIdSimulacao(transferencia.getIdTransacao())
 				.setEvento(transferencia.getEvento())
 				.build();
 		

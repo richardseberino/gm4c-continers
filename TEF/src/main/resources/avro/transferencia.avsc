@@ -13,7 +13,7 @@
        { "name": "dv_destino", "type": "int", "doc": "dac da conta de destino" },
        { "name": "valor", "type": "float", "doc": "Valor da Transferencia" },
        { "name": "senha", "type": "string", "doc": "Senha para validar a transferencia" },
-       { "name": "id_transcao", "type": "string", "doc": "Id da transacao" },
+       { "name": "id_transacao", "type": "string", "doc": "Id da transacao" },
        { "name": "tipo_transacao", "type": "string", "doc": "Tipo de transacao, CC_CC, CC_CP, CP_CP, CP_CC" }
      ]
 }

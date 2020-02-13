@@ -2,6 +2,7 @@ package com.gm4c.tef;
 
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.UUID;
@@ -64,6 +65,23 @@ public class TefController {
 		}
 		
 		TefDto simulacao = t1.get();
+		if (!simulacao.getRc_efetivacao().startsWith("[0]"))
+		{
+			return ResponseEntity.status(403).build();
+		}
+		
+		simulacao.setEvento("efetivacao");
+		simulacao.setRc_credito("[2] pendente");
+		simulacao.setRc_debito("[2] pendente");
+		simulacao.setRc_efetivacao("[2] enviada");
+		simulacao.setRc_limite("[2] pendente");
+		simulacao.setRc_senha("[2] pendente");
+
+		repTef.save(simulacao);
+		
+		
+		
+		
 		
 		//cria o objeto do Avro com a mensagem do evento de efetiva ao
 		Transferencia efetivaAvro = Transferencia.newBuilder()
@@ -77,7 +95,7 @@ public class TefController {
 				.setValor(simulacao.getValor())
 				.setTipoTransacao(simulacao.getId_tef())
 				.setSenha(simulacao.getSenha())
-				.setIdTranscao(simulacao.getId_tef())
+				.setIdTransacao(simulacao.getId_tef())
 				.build(); 
 		
 		//envia a mensagem ao kafka
@@ -108,7 +126,7 @@ public class TefController {
 				.setValor(simulacao.getValor())
 				.setTipoTransacao(simulacao.getTipo_transacao())
 				.setSenha(simulacao.getSenha())
-				.setIdTranscao(idTransacao)
+				.setIdTransacao(idTransacao)
 				.build();
 				
 		//armazena os dados da simulacao na base do cassandra para posterior efetivacao
@@ -150,6 +168,11 @@ public class TefController {
 		
 		
 		
+		
+		
+		
+		sim.setRc_simulacao("[0] Simulacao concluida");
+		repTef.save(sim);
 		//Prepara resultado
 		ResultadoSimulacaoTefDto resultado = new ResultadoSimulacaoTefDto();
 		resultado.setAgencia_destino(simulacao.getAgencia_destino());
@@ -163,6 +186,38 @@ public class TefController {
 		resultado.setId_transacao(idTransacao);
 		
 		return ResponseEntity.ok(resultado);
+	}
+	
+	private boolean verificaEtapa(String idSimulacao, String evento)
+	{
+
+		List<TefDto> lista = repTef.findByTransactionid(idSimulacao);
+		
+		if (lista.isEmpty())
+		{
+			return false;
+		}
+		
+		TefDto ev = lista.get(0);
+		
+		if (evento.equalsIgnoreCase("simulacao"))
+		{
+			if (!ev.getRc_credito().startsWith("[2]") && !ev.getRc_debito().startsWith("[2]") && !ev.getRc_limite().startsWith("[2]") && !ev.getRc_senha().startsWith("[2]"))
+			{
+				return true;
+			}
+		} 
+		else // efetivaao
+		{
+			if (!ev.getRc_credito().startsWith("[2]") && !ev.getRc_debito().startsWith("[2]") && !ev.getRc_limite().startsWith("[2]") && !ev.getRc_senha().startsWith("[2]"))
+			{
+				return true;
+			}
+			
+		}
+		
+		
+		return false;
 	}
 	
 	@KafkaListener(topics="limite", groupId = "tef")
