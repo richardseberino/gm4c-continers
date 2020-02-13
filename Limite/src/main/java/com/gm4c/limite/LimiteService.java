@@ -7,16 +7,22 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import com.gm4c.limite.dto.LimiteDto;
+import com.gm4c.limite.dto.LimiteRepositorio;
 import com.gm4c.tef.Transferencia;
 import com.google.gson.Gson;
 
 @Service
 public class LimiteService {
-
+	
+	//Malvaro
+	@Autowired
+	LimiteRepositorio replimite;
+	// 
+	
 	@Autowired
 	private final KafkaTemplate<String, Limite> kafkaLimite;// = new KafkaProducer<String, Simulacao>(propriedades);
-
-
+	
 	public LimiteService(KafkaTemplate<String, Limite> k1)
 	{
 		this.kafkaLimite = k1;
@@ -28,15 +34,21 @@ public class LimiteService {
 		Object t1 = record.value();
 		Transferencia transferencia = new Gson().fromJson(t1.toString(), Transferencia.class);
 		
+		// Malvaro 13/02
+		Double valortef, valordisponivel;
 		
-		
+		LimiteDto dadosLimite = null;
+//		dadosLimite = replimite.pesquisaLimite(transferencia.getAgenciaOrigem(),transferencia.getContaOrigem(), transferencia.getDvOrigem());
+
 		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
 		{
-			/** @TODO colocar a inteligencia para atualizar o limote **/
+			/** @TODO colocar a inteligencia para atualizar o limite **/
 		}
 		else
 		{
-			/** @TODO colocar a lógica para vlidar o limite **/
+			/** @TODO colocar a lógica para validar o limite **/
+			
+			
 		}
 		
 		boolean aprovado = true;
@@ -51,8 +63,6 @@ public class LimiteService {
 				.setValor(transferencia.getValor())
 				.setAprovado(aprovado)
 				.build();
-		
-
 		
 		//envia a respota do limite para o kafka no topico limite
 		kafkaLimite.send("limite", limite);
