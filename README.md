@@ -1,11 +1,12 @@
 
 
+##########################################################################################################
 # Kafka
-
+##########################################################################################################
 ## Cria o container de Kfaka
 docker run -d -p 2181:2181 -p 3030:3030 -p 8081-8083:8081-8083 -p 9581-9585:9581-9585 -p 9092:9092 --name=kafka  -e ADV_HOST=127.0.0.1 landoop/fast-data-dev:latest
 
-## Se necessário Startar o Docker
+## Se necessário Start do container
 docker start kafka
 
 ## Entra no container do Kafka
@@ -22,12 +23,16 @@ kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partit
 kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic limite
 
 
-
+##########################################################################################################
 # Cassandra
+##########################################################################################################
 Docker User/Pass: cassandra / cassandra
 
 ## Cria o container do cassandra
 docker run --name cassandra -p 7000:7000 -p 9042:9042 -d cassandra:latest
+
+## Se necessário Start do container
+docker start cassandra
 
 ## entra no container do casandra 
 docker exec -it cassandra bash
@@ -38,7 +43,6 @@ cqlsh
 ## cria o banco de dados
 create keyspace itau WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};
 use itau;
-
 
 ## cria as tabelas ;
 CREATE TABLE tef (id_tef uuid PRIMARY KEY, evento text, tipo text, agencia_origem int, conta_origem int, dv_origem int, agencia_destino int, conta_destino int, dv_destino int, timestamp timestamp, valor decimal, senha text, transacionId text, rc_simulacao text,msg_simulacao text, rc_senha text, msg_senha text, rc_limite text, msg_limite text, rc_credito text, msg_credito text, rc_debito text, msg_debito text, rc_efetivacao text, msg_efetivacao text);
