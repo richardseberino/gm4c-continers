@@ -5,14 +5,11 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -32,7 +29,6 @@ import com.gm4c.tef.dto.TefDto;
 import com.gm4c.tef.dto.TefRepositorio;
 import com.google.gson.Gson;
 
-import io.confluent.kafka.serializers.KafkaAvroSerializer;
 
 @RestController
 @RequestMapping("/tef")
@@ -66,7 +62,7 @@ public class TefController {
 		}
 		
 		TefDto simulacao = t1.get();
-		if (!simulacao.getRc_efetivacao().startsWith("[0]"))
+		if (!simulacao.getRc_efetivacao().startsWith("[2]") || !simulacao.getRc_simulacao().startsWith("[0]"))
 		{
 			return ResponseEntity.status(403).build();
 		}
@@ -80,7 +76,51 @@ public class TefController {
 
 		repTef.save(simulacao);
 		
+		Date inicio = new Date();
+		Date agora = new Date();
+		try
+		{
+			while (!verificaEtapa(id_simulacao, "efetivacao")) 
+			{
+				agora = new Date();
+				if (agora.getTime()-inicio.getTime()>20000)
+				{
+					throw new Exception("[-3] timeout!");
+				}
+
+				Thread.sleep(500);
+			}
+			List<TefDto> list = repTef.findByTransactionid(id_simulacao);
+			if (list.isEmpty())
+			{
+				throw new Exception("[-4] Falha ao atualizar a simulacao");
+			}
+			simulacao = list.get(0);
+			
+			if (!simulacao.getRc_debito().startsWith("[0]"))
+			{
+				throw new Exception("[-5] falha ao fazer o debito. " + simulacao.getRc_credito());
+			}
+			if (!simulacao.getRc_credito().startsWith("[0]"))
+			{
+				throw new Exception("[-6] falha ao fazer o credito. " + simulacao.getRc_credito());
+			}
+			if (!simulacao.getRc_limite().startsWith("[0]"))
+			{
+				throw new Exception("[-7] falha ao atualizar o limite. "  + simulacao.getRc_limite());
+			}
+			simulacao.setRc_efetivacao("[0] Efetivação concluida");
+
+		}
+		catch (Exception e)
+		{
+			simulacao.setRc_simulacao(e.getMessage());
+			simulacao.setMsg_simulacao("Timeout, transacao demorou para receber retorno do limmite e conta");
+			
+		}
 		
+		repTef.save(simulacao);
+	
 		
 		
 		
@@ -102,7 +142,20 @@ public class TefController {
 		//envia a mensagem ao kafka
 		kafkaSimulacao.send(topico, efetivaAvro);
 		
-		return null;
+		ResultadoSimulacaoTefDto resultado = new ResultadoSimulacaoTefDto();
+		resultado.setAgencia_destino(simulacao.getAgencia_destino());
+		resultado.setConta_destino(simulacao.getConta_destino());
+		resultado.setDv_destino(simulacao.getDv_destino());
+		resultado.setAgencia_origem(simulacao.getAgencia_origem());
+		resultado.setConta_origem(simulacao.getConta_origem());
+		resultado.setDv_origem(simulacao.getDv_origem());
+		resultado.setTipo_transacao(simulacao.getTipo());
+		resultado.setValor(simulacao.getValor());
+		resultado.setId_transacao(id_simulacao);
+		resultado.setResultado(simulacao.getRc_simulacao());
+		
+		return ResponseEntity.ok(resultado);
+
 	}
 	
 	
@@ -164,8 +217,6 @@ public class TefController {
 		kafkaSimulacao.send(topico, simulaAvro);
 		
 		
-		/** @TODO implementar a logica para aguardar o resultado da senha, conta e limite para preprar o resultado **/
-
 		Date inicio = new Date();
 		Date agora = new Date();
 		try
@@ -173,7 +224,7 @@ public class TefController {
 			while (!verificaEtapa(idTransacao, "simulacao")) 
 			{
 				agora = new Date();
-				if (agora.compareTo(inicio)>20000)
+				if (agora.getTime()-inicio.getTime()>20000)
 				{
 					throw new Exception("[-3] timeout!");
 				}
