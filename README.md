@@ -187,11 +187,15 @@ SELECT * FROM conta;
 # Git Bash
 #####################################################################################
 ATENÇÃO!!! Executar uma única vez:
+----------------------------------------
 
    git config --global user.name "FIRST_NAME LAST_NAME"
    
    git config --global user.email "MY_NAME@example.com"
 
+
+ATENÇÃO!!! Executar Sempre:
+----------------------------------------
 1. Executar o Git Bash.
    Ex.: /c/Users/???/git/gm4c
 
