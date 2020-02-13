@@ -1,6 +1,7 @@
 package com.gm4c.tef.dto;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
@@ -181,11 +182,11 @@ public class TefDto {
 		this.senha = senha;
 	}
 
-	public Timestamp getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Timestamp timestamp) {
+	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -249,7 +250,7 @@ public class TefDto {
 		@Column private String rc_simulacao;
 		@Column private String senha;
 		
-		@Column private Timestamp timestamp;
+		@Column private Date timestamp;
 		
 		@Column private String tipo;
 		

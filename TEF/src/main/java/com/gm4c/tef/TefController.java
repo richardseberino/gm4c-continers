@@ -190,6 +190,8 @@ public class TefController {
 			simulacao.setMsg_limite("Limite insuficiente");
 			simulacao.setRc_limite("[-1] limite insuficiente");
 		}
+		
+		repTef.save(simulacao);
 	}
 
 	
