@@ -234,3 +234,18 @@ ATENÇÃO!!! Executar Sempre:
 4. Fazer o Refresh + Project Clean no Eclipse (Spring Tool Suite)
 
 
+
+5. Para subir uma alteração:
+
+git add /c/users/{usuario}/git/gm4c/{arquivo}
+
+git commit -am "Alterado"
+
+git push
+
+
+6. Refazer o item 3 (Fetch + Pull)
+
+
+
+
