@@ -53,7 +53,7 @@ public class SenhaService {
 		}
 		
 		
-		if (senha!=null && senha.getSenha()==transferencia.getSenha())
+		if (senha!=null && senha.getSenha().equals(transferencia.getSenha()))
 		{
 			aprovado = true;
 		}

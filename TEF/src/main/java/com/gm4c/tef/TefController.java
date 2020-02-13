@@ -83,7 +83,7 @@ public class TefController {
 			while (!verificaEtapa(id_simulacao, "efetivacao")) 
 			{
 				agora = new Date();
-				if (agora.getTime()-inicio.getTime()>20000)
+				if (agora.getTime()-inicio.getTime()>10000)
 				{
 					throw new Exception("[-3] timeout!");
 				}
@@ -99,7 +99,7 @@ public class TefController {
 			
 			if (!simulacao.getRc_debito().startsWith("[0]"))
 			{
-				throw new Exception("[-5] falha ao fazer o debito. " + simulacao.getRc_credito());
+				throw new Exception("[-5] falha ao fazer o debito. " + simulacao.getRc_debito());
 			}
 			if (!simulacao.getRc_credito().startsWith("[0]"))
 			{
@@ -224,7 +224,7 @@ public class TefController {
 			while (!verificaEtapa(idTransacao, "simulacao")) 
 			{
 				agora = new Date();
-				if (agora.getTime()-inicio.getTime()>20000)
+				if (agora.getTime()-inicio.getTime()>10000)
 				{
 					throw new Exception("[-3] timeout!");
 				}
@@ -240,7 +240,7 @@ public class TefController {
 			
 			if (!sim.getRc_debito().startsWith("[0]"))
 			{
-				throw new Exception("[-5] falha na consta origem. " + sim.getRc_credito());
+				throw new Exception("[-5] falha na consta origem. " + sim.getRc_debito());
 			}
 			if (!sim.getRc_credito().startsWith("[0]"))
 			{
@@ -345,7 +345,7 @@ public class TefController {
 			simulacao.setMsg_limite("Limite insuficiente");
 			simulacao.setRc_limite("[-1] limite insuficiente");
 		}
-		
+		System.out.println("RESPOSTA LIMITE " + simulacao.getRc_limite());
 		repTef.save(simulacao);
 	}
 
@@ -371,7 +371,7 @@ public class TefController {
 		simulacao.setRc_debito(conta.getMotivoContaOrigem());
 		simulacao.setMsg_credito(conta.getMotivoContaDestino());
 		simulacao.setRc_credito(conta.getMotivoContaDestino());
-		
+		System.out.println("RESPOSTA CONTA " + simulacao.getRc_credito() + ", " + simulacao.getRc_debito());
 		repTef.save(simulacao);
 	}
 
@@ -401,6 +401,7 @@ public class TefController {
 			simulacao.setMsg_senha("Senha inválida");
 			simulacao.setRc_senha("[-1] Senha invalida");
 		}
+		System.out.println("RESPOSTA SENHA " + simulacao.getRc_senha());
 		repTef.save(simulacao);
 		
 	}
