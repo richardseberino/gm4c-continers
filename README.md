@@ -176,6 +176,25 @@ INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 29, 0, 100.00, 0);
 
 SELECT * FROM tef;
+
 SELECT * FROM senha;
+
 SELECT * FROM limite;
+
 SELECT * FROM conta;
+
+#####################################################################################
+# Git Bash
+#####################################################################################
+ATENÇÃO!!! Executar uma única vez:
+   git config --global user.name "FIRST_NAME LAST_NAME"
+   git config --global user.email "MY_NAME@example.com"
+
+1. Executar o Git Bash.
+2. Entrar no diretório do Git do projeto (onde encontra o .GIT).
+3. Baixar o repositório atualizado:
+   git fetch
+   git pull 
+4. Fazer o Refresh + Project Clean no Eclipse (Spring Tool Suite)
+
+
