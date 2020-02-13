@@ -46,7 +46,7 @@ create keyspace itau WITH replication = {'class':'SimpleStrategy', 'replication_
 use itau;
 
 ## cria as tabelas ;
-CREATE TABLE tef (id_tef uuid PRIMARY KEY, evento text, tipo text, agencia_origem int, conta_origem int, dv_origem int, agencia_destino int, conta_destino int, dv_destino int, timestamp timestamp, valor decimal, senha text, transacionId text, rc_simulacao text,msg_simulacao text, rc_senha text, msg_senha text, rc_limite text, msg_limite text, rc_credito text, msg_credito text, rc_debito text, msg_debito text, rc_efetivacao text, msg_efetivacao text);
+CREATE TABLE tef (id_tef uuid PRIMARY KEY, evento text, tipo text, agencia_origem int, conta_origem int, dv_origem int, agencia_destino int, conta_destino int, dv_destino int, timestamp timestamp, valor decimal, senha text, transactionId text, rc_simulacao text,msg_simulacao text, rc_senha text, msg_senha text, rc_limite text, msg_limite text, rc_credito text, msg_credito text, rc_debito text, msg_debito text, rc_efetivacao text, msg_efetivacao text);
 
 CREATE TABLE senha (id_senha uuid PRIMARY KEY, agencia int, conta int, dv int, senha text);
 
@@ -176,6 +176,38 @@ INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (
 INSERT INTO conta (id_conta, agencia, conta, dv, valor_saldo, bloqueio) VALUES (uuid(), 20, 29, 0, 100.00, 0);
 
 SELECT * FROM tef;
+
 SELECT * FROM senha;
+
 SELECT * FROM limite;
+
 SELECT * FROM conta;
+
+#####################################################################################
+# Git Bash
+#####################################################################################
+
+ATENÇÃO!!! Executar uma única vez:
+----------------------------------------
+
+   git config --global user.name "FIRST_NAME LAST_NAME"
+   
+   git config --global user.email "MY_NAME@example.com"
+
+
+ATENÇÃO!!! Executar Sempre:
+----------------------------------------
+1. Executar o Git Bash.
+   Ex.: /c/Users/???/git/gm4c
+
+2. Entrar no diretório do Git do projeto (onde encontra o .GIT).
+
+3. Baixar o repositório atualizado:
+
+   git fetch
+   
+   git pull 
+   
+4. Fazer o Refresh + Project Clean no Eclipse (Spring Tool Suite)
+
+
