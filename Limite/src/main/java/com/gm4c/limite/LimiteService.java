@@ -22,7 +22,7 @@ public class LimiteService {
 		this.kafkaLimite = k1;
 	}
 	
-	@KafkaListener(topics="simulacao", groupId = "limite")
+	@KafkaListener(topics="tef", groupId = "limite")
 	public void validaLimite(ConsumerRecord<String, Transferencia> record)
 	{
 		Object t1 = record.value();
