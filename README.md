@@ -187,14 +187,22 @@ SELECT * FROM conta;
 # Git Bash
 #####################################################################################
 ATENÇÃO!!! Executar uma única vez:
+
    git config --global user.name "FIRST_NAME LAST_NAME"
+   
    git config --global user.email "MY_NAME@example.com"
 
 1. Executar o Git Bash.
+   Ex.: /c/Users/???/git/gm4c
+
 2. Entrar no diretório do Git do projeto (onde encontra o .GIT).
+
 3. Baixar o repositório atualizado:
+
    git fetch
+   
    git pull 
+   
 4. Fazer o Refresh + Project Clean no Eclipse (Spring Tool Suite)
 
 
