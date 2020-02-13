@@ -40,8 +40,6 @@ public class LimiteService {
 
 		try 
 		{
-			Thread.sleep(300);
-
 			dadosLimite = replimite.pesquisaLimite(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0); 
 			if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
 			{

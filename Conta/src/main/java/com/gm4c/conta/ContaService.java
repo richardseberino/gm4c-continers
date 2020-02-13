@@ -45,8 +45,6 @@ public class ContaService {
 		//verificando conta origem
 		try
 		{
-			Thread.sleep(200);
-
 			contaOrigem = repConta.pesquisaPorAgenciaConta(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0);
 		}
 		catch (Exception e)
