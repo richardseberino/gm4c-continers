@@ -26,7 +26,7 @@ public class ContaService {
 		this.kafkaConta = k1;
 	}
 	
-	@KafkaListener(topics="simulacao", groupId = "conta")
+	@KafkaListener(topics="tef", groupId = "conta")
 	public void validaLimite(ConsumerRecord<String, Transferencia> record)
 	{
 		Object t1 = record.value();
@@ -35,6 +35,8 @@ public class ContaService {
 		
 		boolean aprovadoOrigem = true;
 		boolean aprovadoDestino = true;
+		String razaoOrigem = "aprovado";
+		String razaoDestino = "aprovado";
 		
 		System.out.println("transferencia " + transferencia);
 		ContaCorrenteDto contaDestino=null;
@@ -68,22 +70,39 @@ public class ContaService {
 				contaDestino.setValor_saldo(contaDestino.getValor_saldo()+transferencia.getValor());
 				rep.save(contaOrigem);
 				rep.save(contaDestino);
+				razaoOrigem = "[50] Debito realizado com sucesso na conta origem!";
+				razaoDestino = "[60] Credito realizado com sucesso na conta destino";
 				
 			}
 		}
 		else //simulacao
 		{
 			
-			if (contaOrigem ==null || contaOrigem.getBloqueio()==1 || contaOrigem.getValor_saldo()< transferencia.getValor())
+			if (contaOrigem ==null) 
 			{
 				aprovadoOrigem=false;
-				
+				razaoOrigem = "[-10] Conta Origem nao existe";
+			}
+			else if (contaOrigem.getBloqueio()==1)
+			{
+				aprovadoOrigem=false;
+				razaoOrigem = "[-11] Conta Origam bloqueada";
+			}
+			else if (contaOrigem.getValor_saldo()<transferencia.getValor())
+			{
+				aprovadoOrigem=false;
+				razaoOrigem = "[-12] Conta Origam bloqueada";
 			}
 			
-			if (contaDestino == null || contaDestino.getBloqueio()==1 )
+			if (contaDestino == null) 
 			{
 				aprovadoDestino=false;
-				
+				razaoDestino = "[-10] Conta Destino nao existe";
+			}
+			else if (contaDestino.getBloqueio()==1 )
+			{
+				aprovadoDestino=false;
+				razaoDestino = "[-11] Conta Destino bloqueada";
 			}
 
 		}
@@ -95,12 +114,12 @@ public class ContaService {
 				.setContaOrigem(transferencia.getContaOrigem())
 				.setDvOrigem(transferencia.getDvOrigem())
 				.setAprovacaoContaOrigem(aprovadoOrigem)
-				.setMotivoContaOrigem("0")
+				.setMotivoContaOrigem(razaoOrigem)
 				.setAgenciaDestino(transferencia.getAgenciaDestino())
 				.setContaDestino(transferencia.getContaDestino())
 				.setDvDestino(transferencia.getDvDestino())
 				.setAprovacaoContaDestino(aprovadoDestino)
-				.setMotivoContaDestino("0")
+				.setMotivoContaDestino(razaoDestino)
 				.build();
 		
 		//envia a respota do limite para o kafka no topico conta

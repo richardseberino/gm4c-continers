@@ -4,6 +4,7 @@
      "name": "Limite",
      "version": "1",
      "fields": [
+       { "name": "id_simulacao", "type": "string", "doc": "id da simulacao" },
        { "name": "agencia", "type": "int", "doc": "Codigo da agencia de origem" },
        { "name": "conta", "type": "int", "doc": "Codigo da conta de origem" },
        { "name": "dv", "type": "int", "doc": "Dac da conta de origem" },

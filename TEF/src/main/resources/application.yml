@@ -27,4 +27,11 @@ spring:
         schema:
           registry:
             url: http://localhost:8081
-
+  data:
+    cassandra:
+      contact-points: 127.0.0.1
+      username: cassandra
+      password: cassandra
+      keyspace-name: itau
+      port: 9042
+      schema-action: CREATE_IF_NOT_EXISTS
