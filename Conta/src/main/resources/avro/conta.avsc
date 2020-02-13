@@ -14,7 +14,7 @@
        { "name": "aprovacao_conta_origem", "type": "boolean", "doc": "se a conta origem foi ou nao aprovada" },
        { "name": "motivo_conta_origem", "type": "string", "doc": "codigo de retorno da conta origem" },
        { "name": "aprovacao_conta_destino", "type": "boolean", "doc": "se a conta origem foi ou nao aprovada" },
-       { "name": "motivo_conta_destino", "type": "string", "doc": "codigo de retorno da conta origem" }
+       { "name": "motivo_conta_destino", "type": "string", "doc": "codigo de retorno da conta origem" },
        { "name": "evento", "type": "string", "doc": "evento" }
      ]
 }
