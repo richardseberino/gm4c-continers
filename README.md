@@ -239,10 +239,9 @@ ATENÇÃO!!! Executar Sempre:
 
 git add /c/users/{usuario}/git/gm4c/{arquivo}
 
-Ou git 
+Ou 
 
-add {diretorio}/src/main/java/com/gm4c/{xxx}/dto/{xxxRepositorio.java}
-
+git add {diretorio}/src/main/java/com/gm4c/{xxx}/dto/{xxxRepositorio.java}
 
 git commit -am "Alterado"
 
