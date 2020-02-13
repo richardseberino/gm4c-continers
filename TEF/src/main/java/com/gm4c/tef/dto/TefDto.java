@@ -198,12 +198,12 @@ public class TefDto {
 		this.tipo = tipo;
 	}
 
-	public String getTransacionid() {
-		return transacionid;
+	public String getTransactionid() {
+		return transactionid;
 	}
 
-	public void setTransacionid(String transacionid) {
-		this.transacionid = transacionid;
+	public void setTransactionid(String transacionid) {
+		this.transactionid = transacionid;
 	}
 
 	public float getValor() {
@@ -254,7 +254,7 @@ public class TefDto {
 		
 		@Column private String tipo;
 		
-		@Column private String transacionid;
+		@Column private String transactionid;
 
 		@Column private float valor;
 		

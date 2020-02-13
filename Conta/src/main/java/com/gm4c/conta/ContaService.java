@@ -35,8 +35,8 @@ public class ContaService {
 		
 		boolean aprovadoOrigem = true;
 		boolean aprovadoDestino = true;
-		String razaoOrigem = "aprovado";
-		String razaoDestino = "aprovado";
+		String razaoOrigem = "[5] Conta Origem verificada e saldo suficiente";
+		String razaoDestino = "[5] Conta Destino verificada";
 		
 		System.out.println("transferencia " + transferencia);
 		ContaCorrenteDto contaDestino=null;
@@ -120,6 +120,8 @@ public class ContaService {
 				.setDvDestino(transferencia.getDvDestino())
 				.setAprovacaoContaDestino(aprovadoDestino)
 				.setMotivoContaDestino(razaoDestino)
+				.setIdSimulacao(transferencia.getIdTranscao())
+				.setEvento(transferencia.getEvento())
 				.build();
 		
 		//envia a respota do limite para o kafka no topico conta

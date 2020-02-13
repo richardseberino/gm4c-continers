@@ -1,5 +1,6 @@
 package com.gm4c.tef;
 
+
 import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.Properties;
@@ -134,7 +135,7 @@ public class TefController {
 		sim.setRc_simulacao("[10] enviada");
 		sim.setSenha(simulacao.getSenha());
 		sim.setTipo(simulacao.getTipo_transacao());
-		sim.setTransacionid(idTransacao);
+		sim.setTransactionid(idTransacao);
 		sim.setValor(simulacao.getValor());
 		sim.setTimestamp(new Timestamp(System.currentTimeMillis()));
 		
@@ -170,14 +171,15 @@ public class TefController {
 		Object t1 = record.value();
 		Limite limite = new Gson().fromJson(t1.toString(), Limite.class);
 		
-		Optional<TefDto> op= repTef.findById(limite.getIdSimulacao());
+		java.util.List<TefDto> lista= repTef.findByTransactionid(limite.getIdSimulacao());
 		
 		//verifica se existe uma simulacao em andamento com esse id
-		if (!op.isPresent())
+		if (lista.size()<=0)
 		{
 			return;
 		}
-		TefDto simulacao = op.get();
+		TefDto simulacao = lista.get(0);
+		
 		
 		
 		if (limite.getAprovado())
@@ -201,17 +203,17 @@ public class TefController {
 		Object t1 = record.value();
 		ContaCorrente conta = new Gson().fromJson(t1.toString(), ContaCorrente.class);
 		
-		Optional<TefDto> op= repTef.findById(conta.getIdSimulacao());
+		java.util.List<TefDto> lista= repTef.findByTransactionid(conta.getIdSimulacao());
 		
 		//verifica se existe uma simulacao em andamento com esse id
-		if (!op.isPresent())
+		if (lista.size()<=0)
 		{
 			return;
 		}
-		
+		TefDto simulacao = lista.get(0);
 		
 		//atualiza o retorno de contas na simulacao / efetivacao
-		TefDto simulacao = op.get();
+		
 		simulacao.setMsg_debito(conta.getMotivoContaOrigem());
 		simulacao.setRc_debito(conta.getMotivoContaOrigem());
 		simulacao.setMsg_credito(conta.getMotivoContaDestino());
@@ -227,15 +229,15 @@ public class TefController {
 		Object t1 = record.value();
 		Senha senha = new Gson().fromJson(t1.toString(), Senha.class);
 		
-		Optional<TefDto> op= repTef.findById(senha.getIdSimulacao()); 
+		java.util.List<TefDto> lista= repTef.findByTransactionid(senha.getIdSimulacao());
 		
-		//verifica se existe uma simulacao feita com esse id
-		if (!op.isPresent())
+		//verifica se existe uma simulacao em andamento com esse id
+		if (lista.size()<=0)
 		{
 			return;
 		}
+		TefDto simulacao = lista.get(0);
 		
-		TefDto simulacao = op.get();
 		if (senha.getAprovado())
 		{
 			simulacao.setMsg_senha("Senha correta");
