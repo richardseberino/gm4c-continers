@@ -252,7 +252,7 @@ public class TefController {
 			}
 			if (!sim.getRc_senha().startsWith("[0]"))
 			{
-				throw new Exception("[-8] limite senha invalida. "  + sim.getRc_senha());
+				throw new Exception("[-8] senha invalida. "  + sim.getRc_senha());
 			}
 			sim.setRc_simulacao("[0] Simulacao concluida");
 
@@ -261,7 +261,7 @@ public class TefController {
 		{
 			sim.setRc_simulacao(e.getMessage());
 			sim.setMsg_simulacao("Timeout, transacao demorou para receber retorno de senha,limmite e conta");
-			
+			sim = repTef.findByTransactionid(idTransacao).get(0);
 		}
 		
 		repTef.save(sim);
@@ -301,21 +301,21 @@ public class TefController {
 		
 		if (evento.equalsIgnoreCase("simulacao"))
 		{
-			if (!ev.getRc_credito().startsWith("[2]") && !ev.getRc_debito().startsWith("[2]") && !ev.getRc_limite().startsWith("[2]") && !ev.getRc_senha().startsWith("[2]"))
+			if (ev.getRc_credito().startsWith("[2]") || ev.getRc_debito().startsWith("[2]") || ev.getRc_limite().startsWith("[2]") || ev.getRc_senha().startsWith("[2]"))
 			{
-				return true;
+				return false;
 			}
 		} 
 		else // efetivaao
 		{
-			if (!ev.getRc_credito().startsWith("[2]") && !ev.getRc_debito().startsWith("[2]") && !ev.getRc_limite().startsWith("[2]") && !ev.getRc_senha().startsWith("[2]"))
+			if (ev.getRc_credito().startsWith("[2]") || ev.getRc_debito().startsWith("[2]") || ev.getRc_limite().startsWith("[2]") || ev.getRc_senha().startsWith("[2]"))
 			{
-				return true;
+				return false;
 			}
 			
 		}
 		
-		return false;
+		return true;
 	}
 	
 	@KafkaListener(topics="limite", groupId = "tef")
@@ -394,12 +394,12 @@ public class TefController {
 		if (senha.getAprovado())
 		{
 			simulacao.setMsg_senha("Senha correta");
-			simulacao.setRc_senha("[0]");
+			simulacao.setRc_senha("[0] Senha Correta");
 		}
 		else
 		{
 			simulacao.setMsg_senha("Senha inválida");
-			simulacao.setRc_senha("[-1]");
+			simulacao.setRc_senha("[-1] Senha invalida");
 		}
 		repTef.save(simulacao);
 		

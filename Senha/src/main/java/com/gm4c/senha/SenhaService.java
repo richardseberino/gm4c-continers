@@ -38,7 +38,7 @@ public class SenhaService {
 		{
 			return;
 		}
-		boolean aprovado = true;
+		boolean aprovado = false;
 		
 		SenhaDto senha=null;
 
@@ -53,11 +53,14 @@ public class SenhaService {
 		}
 		
 		
-		if (senha!=null && senha.getSenha()!=transferencia.getSenha())
+		if (senha!=null && senha.getSenha()==transferencia.getSenha())
 		{
-			aprovado = false;
+			aprovado = true;
 		}
-		
+		if (senha!=null)
+		{
+			System.out.println("senha payload " + transferencia.getSenha() + ", senha banco " + senha.getSenha());
+		}
 		//prepara o registro do avro sobre o retorno da senha
 		Senha senhaResp = Senha.newBuilder()
 				.setAgencia(transferencia.getAgenciaOrigem())

@@ -71,6 +71,7 @@ public class LimiteService {
 				.setDv(transferencia.getDvOrigem())
 				.setValor(transferencia.getValor())
 				.setIdSimulacao(transferencia.getIdTransacao())
+				.setEvento(transferencia.getEvento())
 				.setAprovado(aprovado)
 				.build();
 		
