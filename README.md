@@ -26,6 +26,7 @@ kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partit
 #####################################################################################
 # Cassandra
 #####################################################################################
+
 Docker User/Pass: cassandra / cassandra
 
 ## Cria o container do cassandra
