@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 public class ContaService {
 
 	@Autowired
-	ContaRepositorio rep;
+	ContaRepositorio repConta;
 	
 	@Autowired
 	private final KafkaTemplate<String, ContaCorrente> kafkaConta;
@@ -45,7 +45,7 @@ public class ContaService {
 		//verificando conta origem
 		try
 		{
-			contaOrigem = rep.pesquisaPorAgenciaConta(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0);
+			contaOrigem = repConta.pesquisaPorAgenciaConta(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0);
 		}
 		catch (Exception e)
 		{
@@ -54,7 +54,7 @@ public class ContaService {
 		//verificando conta destino
 		try
 		{
-			contaDestino = rep.pesquisaPorAgenciaConta(transferencia.getAgenciaDestino(), transferencia.getContaDestino(), transferencia.getDvDestino()).get(0);
+			contaDestino = repConta.pesquisaPorAgenciaConta(transferencia.getAgenciaDestino(), transferencia.getContaDestino(), transferencia.getDvDestino()).get(0);
 			
 		}
 		catch (Exception e)
@@ -68,8 +68,8 @@ public class ContaService {
 			{
 				contaOrigem.setValor_saldo(contaOrigem.getValor_saldo()-transferencia.getValor());
 				contaDestino.setValor_saldo(contaDestino.getValor_saldo()+transferencia.getValor());
-				rep.save(contaOrigem);
-				rep.save(contaDestino);
+				repConta.save(contaOrigem);
+				repConta.save(contaDestino);
 				razaoOrigem = "[50] Debito realizado com sucesso na conta origem!";
 				razaoDestino = "[60] Credito realizado com sucesso na conta destino";
 				

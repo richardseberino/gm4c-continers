@@ -39,7 +39,7 @@ public class TefController {
 	private final KafkaTemplate<String, Transferencia> kafkaSimulacao;// = new KafkaProducer<String, Simulacao>(propriedades);
 	
 	@Autowired
-	private TefRepositorio rep;
+	private TefRepositorio repTef;
 	
 	public TefController(KafkaTemplate<String, Transferencia> kafka)
 	{
@@ -54,7 +54,7 @@ public class TefController {
 		
 		//Recupera os dados da simulacao
 		
-		Optional<TefDto> t1= rep.findById(id_simulacao); 
+		Optional<TefDto> t1= repTef.findById(id_simulacao); 
 		
 		//verifica se existe uma simulacao feita com esse id
 		if (!t1.isPresent())
@@ -138,7 +138,7 @@ public class TefController {
 		sim.setValor(simulacao.getValor());
 		sim.setTimestamp(new Timestamp(System.currentTimeMillis()));
 		
-		rep.insert(sim);
+		repTef.insert(sim);
 		
 		//envia a mensagem ao kafka
 		kafkaSimulacao.send(topico, simulaAvro);
@@ -164,62 +164,88 @@ public class TefController {
 		return ResponseEntity.ok(resultado);
 	}
 	
-	@KafkaListener(topics="limite", groupId = "simulacao")
+	@KafkaListener(topics="limite", groupId = "tef")
 	public void validaLimite(ConsumerRecord<String, Limite> record)
 	{
 		Object t1 = record.value();
 		Limite limite = new Gson().fromJson(t1.toString(), Limite.class);
 		
+		Optional<TefDto> op= repTef.findById(limite.getIdSimulacao());
+		
+		//verifica se existe uma simulacao em andamento com esse id
+		if (!op.isPresent())
+		{
+			return;
+		}
+		TefDto simulacao = op.get();
+		
+		
 		if (limite.getAprovado())
 		{
-			System.out.println("Limite aprovado!");
+			simulacao.setMsg_limite("Limite aprovado");
+			simulacao.setRc_limite("[0] limite aprovado");
 		}
 		else
 		{
-			System.out.println("Limite insuficiente");
+			simulacao.setMsg_limite("Limite insuficiente");
+			simulacao.setRc_limite("[-1] limite insuficiente");
 		}
 	}
 
 	
-	@KafkaListener(topics="conta", groupId = "simulacao")
+	@KafkaListener(topics="conta", groupId = "tef")
 	public void validaConta(ConsumerRecord<String, ContaCorrente> record)
 	{
 		Object t1 = record.value();
 		ContaCorrente conta = new Gson().fromJson(t1.toString(), ContaCorrente.class);
 		
-		if (conta.getAprovacaoContaOrigem())
+		Optional<TefDto> op= repTef.findById(conta.getIdSimulacao());
+		
+		//verifica se existe uma simulacao em andamento com esse id
+		if (!op.isPresent())
 		{
-			System.out.println("Conta Origem aprovada!");
+			return;
 		}
-		else
-		{
-			System.out.println("Conta Origem reprovada, razao: " + conta.getMotivoContaOrigem());
-		}
-		if (conta.getAprovacaoContaDestino())
-		{
-			System.out.println("Conta Destino aprovada!");
-		}
-		else
-		{
-			System.out.println("Conta Destino reprovada, razao: " + conta.getMotivoContaDestino());
-		}
+		
+		
+		//atualiza o retorno de contas na simulacao / efetivacao
+		TefDto simulacao = op.get();
+		simulacao.setMsg_debito(conta.getMotivoContaOrigem());
+		simulacao.setRc_debito(conta.getMotivoContaOrigem());
+		simulacao.setMsg_credito(conta.getMotivoContaDestino());
+		simulacao.setRc_credito(conta.getMotivoContaDestino());
+		
+		repTef.save(simulacao);
 	}
 
 	
-	@KafkaListener(topics="senha", groupId = "simulacao")
+	@KafkaListener(topics="senha", groupId = "tef")
 	public void validaSenha(ConsumerRecord<String, Senha> record)
 	{
 		Object t1 = record.value();
 		Senha senha = new Gson().fromJson(t1.toString(), Senha.class);
 		
+		Optional<TefDto> op= repTef.findById(senha.getIdSimulacao()); 
+		
+		//verifica se existe uma simulacao feita com esse id
+		if (!op.isPresent())
+		{
+			return;
+		}
+		
+		TefDto simulacao = op.get();
 		if (senha.getAprovado())
 		{
-			System.out.println("Senha Validada!");
+			simulacao.setMsg_senha("Senha correta");
+			simulacao.setRc_senha("[0]");
 		}
 		else
 		{
-			System.out.println("Senha incorreta");
+			simulacao.setMsg_senha("Senha inválida");
+			simulacao.setRc_senha("[-1]");
 		}
+		repTef.save(simulacao);
+		
 	}
 	
 	

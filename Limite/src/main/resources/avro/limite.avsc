@@ -9,6 +9,7 @@
        { "name": "conta", "type": "int", "doc": "Codigo da conta de origem" },
        { "name": "dv", "type": "int", "doc": "Dac da conta de origem" },
        { "name": "valor", "type": "float", "doc": "Valor da Transferencia" },
-       { "name": "aprovado", "type": "boolean", "doc": "Retorna verdadeiro se houver limite ainda no dia" }
+       { "name": "aprovado", "type": "boolean", "doc": "Retorna verdadeiro se houver limite ainda no dia" },
+       { "name": "evento", "type": "string", "doc": "Retorna o tipo de evento" }
      ]
 }

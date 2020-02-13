@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 public class SenhaService {
 
 	@Autowired
-	SenhaRepositorio repZ;
+	SenhaRepositorio repSenha;
 
 	@Autowired
 	private final KafkaTemplate<String, Senha> kafkaSenha;
@@ -44,7 +44,7 @@ public class SenhaService {
 		//verificando agencia conta e dv  (busca o registro pelos 3 campos>
 		try
 		{
-			senha = repZ.pesquisaPorAgenciaConta(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0);
+			senha = repSenha.pesquisaPorAgenciaConta(transferencia.getAgenciaOrigem(), transferencia.getContaOrigem(), transferencia.getDvOrigem()).get(0);
 		}
 		catch (Exception e)
 		{
