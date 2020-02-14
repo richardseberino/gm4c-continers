@@ -41,7 +41,8 @@ public class SenhaService {
 		boolean aprovado = false;
 		
 		SenhaDto senha=null;
-
+		System.out.println("ZZZ001");
+		
 		//verificando agencia conta e dv  (busca o registro pelos 3 campos>
 		try
 		{

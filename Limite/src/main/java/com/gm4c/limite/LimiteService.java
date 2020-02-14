@@ -37,7 +37,8 @@ public class LimiteService {
 		boolean aprovado = true;
 
 		LimiteDto dadosLimite = null;
-
+		System.out.println("ZZZ001");
+		
 		try 
 		{
 			Thread.sleep(300);
