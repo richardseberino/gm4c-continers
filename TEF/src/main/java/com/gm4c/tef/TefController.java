@@ -80,7 +80,7 @@ public class TefController {
 		simulacao.setRc_debito("[2] pendente");
 		simulacao.setRc_efetivacao("[2] enviada");
 		simulacao.setRc_limite("[2] pendente");
-		simulacao.setRc_senha("[2] pendente");
+//		simulacao.setRc_senha("[2] pendente");
 
 		repTef.save(simulacao);
 		
@@ -121,8 +121,8 @@ public class TefController {
 		}
 		catch (Exception e)
 		{
-			simulacao.setRc_simulacao(e.getMessage());
-			simulacao.setMsg_simulacao("Timeout, transacao demorou para receber retorno do limmite e conta");
+			simulacao.setRc_efetivacao(e.getMessage());
+			simulacao.setMsg_efetivacao("Timeout, transacao demorou para receber retorno do limmite e conta");
 			
 		}
 		
@@ -141,7 +141,7 @@ public class TefController {
 				.setContaDestino(simulacao.getConta_destino())
 				.setDvDestino(simulacao.getDv_destino())
 				.setValor(simulacao.getValor())
-				.setTipoTransacao(simulacao.getId_tef())
+				.setTipoTransacao(simulacao.getTipo())
 				.setSenha(simulacao.getSenha())
 				.setIdTransacao(simulacao.getId_tef())
 				.build(); 
@@ -159,7 +159,7 @@ public class TefController {
 		resultado.setTipo_transacao(simulacao.getTipo());
 		resultado.setValor(simulacao.getValor());
 		resultado.setId_transacao(id_simulacao);
-		resultado.setResultado(simulacao.getRc_simulacao());
+		resultado.setResultado(simulacao.getRc_efetivacao());
 		
 		return ResponseEntity.ok(resultado);
 
@@ -325,7 +325,7 @@ public class TefController {
 		} 
 		else // efetivaao
 		{
-			if (ev.getRc_credito().startsWith("[2]") || ev.getRc_debito().startsWith("[2]") || ev.getRc_limite().startsWith("[2]") || ev.getRc_senha().startsWith("[2]"))
+			if (ev.getRc_credito().startsWith("[2]") || ev.getRc_debito().startsWith("[2]") || ev.getRc_limite().startsWith("[2]"))
 			{
 				return false;
 			}
@@ -338,6 +338,7 @@ public class TefController {
 	@KafkaListener(topics="limite", groupId = "tef")
 	public void validaLimite(ConsumerRecord<String, Limite> record)
 	{
+		System.out.println("ZZZ001 - limite - tef");
 		Object t1 = record.value();
 		Limite limite = new Gson().fromJson(t1.toString(), Limite.class);
 		
@@ -370,6 +371,7 @@ public class TefController {
 	@KafkaListener(topics="conta", groupId = "tef")
 	public void validaConta(ConsumerRecord<String, ContaCorrente> record)
 	{
+		System.out.println("ZZZ001 - conta - tef");
 		Object t1 = record.value();
 		ContaCorrente conta = new Gson().fromJson(t1.toString(), ContaCorrente.class);
 		
@@ -397,7 +399,7 @@ public class TefController {
 	public void validaSenha(ConsumerRecord<String, Senha> record)
 	{
 		Object t1 = record.value();
-		System.out.println("ZZZ001");
+		System.out.println("ZZZ001 - senha - tef");
 		Senha senha = new Gson().fromJson(t1.toString(), Senha.class);
 		System.out.println("ZZZ002" + senha);
 		

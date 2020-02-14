@@ -31,7 +31,6 @@ public class ContaService {
 	{
 		Object t1 = record.value();
 		Transferencia transferencia = new Gson().fromJson(t1.toString(), Transferencia.class);
-
 		
 		boolean aprovadoOrigem = true;
 		boolean aprovadoDestino = true;
@@ -42,6 +41,7 @@ public class ContaService {
 		ContaCorrenteDto contaDestino=null;
 		ContaCorrenteDto contaOrigem=null;
 
+		System.out.println("ZZZ001");
 		//verificando conta origem
 		try
 		{
