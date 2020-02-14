@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gm4c.conta.ContaCorrente;
 import com.gm4c.limite.Limite;
 import com.gm4c.senha.Senha;
+import com.gm4c.tef.dto.RequestEfetivacaoTefDto;
 import com.gm4c.tef.dto.RequestSimulacaoTefDto;
 import com.gm4c.tef.dto.ResultadoSimulacaoTefDto;
 import com.gm4c.tef.dto.TefDto;
@@ -45,23 +46,30 @@ public class TefController {
 		this.kafkaSimulacao = kafka;
 	}
 	
-	@PatchMapping("/efetiva")
-	public ResponseEntity<ResultadoSimulacaoTefDto> efetivaTransferencia(@RequestBody String id_simulacao)
+	@PatchMapping("/efetivacao")
+//	public ResponseEntity<ResultadoSimulacaoTefDto> efetivaTransferencia(@RequestBody String id_simulacao)
+	public ResponseEntity<ResultadoSimulacaoTefDto> efetivaTransferencia(@RequestBody RequestEfetivacaoTefDto efetivacao)
 	{
+		
 		//define o topico kafka
 		String topico = "tef";
 		
+//		UUID id_transacao = UUID.fromString(efetivacao.getIdTransacao());
+		String id_simulacao = efetivacao.getIdTransacao();
+		
 		//Recupera os dados da simulacao
 		
-		Optional<TefDto> t1= repTef.findById(id_simulacao); 
+//		List<TefDto> t1= repTef.findByTransactionid(id_simulacao); 
+		List<TefDto> t1= repTef.findByTransactionid(efetivacao.getIdTransacao()); 
+
 		
 		//verifica se existe uma simulacao feita com esse id
-		if (!t1.isPresent())
+		if (t1.isEmpty())
 		{
 			return ResponseEntity.notFound().build();
 		}
 		
-		TefDto simulacao = t1.get();
+		TefDto simulacao = t1.get(0);
 		if (!simulacao.getRc_efetivacao().startsWith("[2]") || !simulacao.getRc_simulacao().startsWith("[0]"))
 		{
 			return ResponseEntity.status(403).build();
