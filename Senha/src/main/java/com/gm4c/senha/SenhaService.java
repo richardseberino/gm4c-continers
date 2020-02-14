@@ -31,6 +31,7 @@ public class SenhaService {
 	{
 		Object t1 = record.value();
 		Transferencia transferencia = new Gson().fromJson(t1.toString(), Transferencia.class);
+	
 		
 		//verifica se for efetivacao, não faz nada
 		if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
@@ -74,7 +75,9 @@ public class SenhaService {
 		
 		
 		//envia a respota da senha para o kafka no topico senha
+		System.out.println("ZZZ999");
 		kafkaSenha.send("senha", senhaResp);
+		System.out.println("ZZZ998");
 		
 	}
 }
