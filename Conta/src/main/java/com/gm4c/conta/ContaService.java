@@ -37,11 +37,9 @@ public class ContaService {
 		String razaoOrigem = "[0] Conta Origem verificada e saldo suficiente";
 		String razaoDestino = "[0] Conta Destino verificada";
 		
-		System.out.println("transferencia " + transferencia);
 		ContaCorrenteDto contaDestino=null;
 		ContaCorrenteDto contaOrigem=null;
 
-		System.out.println("ZZZ001");
 		//verificando conta origem
 		try
 		{
@@ -93,7 +91,7 @@ public class ContaService {
 			else if (contaOrigem.getValor_saldo()<transferencia.getValor())
 			{
 				aprovadoOrigem=false;
-				razaoOrigem = "[-12] Conta Origem bloqueada";
+				razaoOrigem = "[-12] Saldo Insuficiente";
 			}
 			
 			if (contaDestino == null) 

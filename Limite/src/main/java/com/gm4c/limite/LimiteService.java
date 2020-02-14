@@ -37,7 +37,6 @@ public class LimiteService {
 		boolean aprovado = true;
 
 		LimiteDto dadosLimite = null;
-		System.out.println("ZZZ001");
 		
 		try 
 		{
@@ -47,7 +46,6 @@ public class LimiteService {
 			if (transferencia.getEvento().equalsIgnoreCase("efetivacao"))
 			{
 				dadosLimite.setValor_utilizado(dadosLimite.getValor_utilizado()+transferencia.getValor());
-				System.out.println("Novo Limite"+ dadosLimite.getValor_utilizado()+transferencia.getValor());
 				replimite.save(dadosLimite);
 			}
 			else //simulacao

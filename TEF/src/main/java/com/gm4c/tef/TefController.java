@@ -54,12 +54,10 @@ public class TefController {
 		//define o topico kafka
 		String topico = "tef";
 		
-//		UUID id_transacao = UUID.fromString(efetivacao.getIdTransacao());
+
 		String id_simulacao = efetivacao.getIdTransacao();
 		
 		//Recupera os dados da simulacao
-		
-//		List<TefDto> t1= repTef.findByTransactionid(id_simulacao); 
 		List<TefDto> t1= repTef.findByTransactionid(efetivacao.getIdTransacao()); 
 
 		
@@ -83,6 +81,29 @@ public class TefController {
 //		simulacao.setRc_senha("[2] pendente");
 
 		repTef.save(simulacao);
+		
+	
+		
+		
+		
+		//cria o objeto do Avro com a mensagem do evento de efetiva ao
+		Transferencia efetivaAvro = Transferencia.newBuilder()
+				.setEvento("efetivacao")
+				.setAgenciaOrigem(simulacao.getAgencia_origem())
+				.setContaOrigem(simulacao.getConta_origem())
+				.setDvOrigem(simulacao.getDv_origem())
+				.setAgenciaDestino(simulacao.getAgencia_destino())
+				.setContaDestino(simulacao.getConta_destino())
+				.setDvDestino(simulacao.getDv_destino())
+				.setValor(simulacao.getValor())
+				.setTipoTransacao(simulacao.getTipo())
+				.setSenha(simulacao.getSenha())
+				.setIdTransacao(simulacao.getId_tef())
+				.build(); 
+		
+		//envia a mensagem ao kafka
+		kafkaSimulacao.send(topico, efetivaAvro);
+
 		
 		Date inicio = new Date();
 		Date agora = new Date();
@@ -127,27 +148,7 @@ public class TefController {
 		}
 		
 		repTef.save(simulacao);
-	
 		
-		
-		
-		//cria o objeto do Avro com a mensagem do evento de efetiva ao
-		Transferencia efetivaAvro = Transferencia.newBuilder()
-				.setEvento("efetivacao")
-				.setAgenciaOrigem(simulacao.getAgencia_origem())
-				.setContaOrigem(simulacao.getConta_origem())
-				.setDvOrigem(simulacao.getDv_origem())
-				.setAgenciaDestino(simulacao.getAgencia_destino())
-				.setContaDestino(simulacao.getConta_destino())
-				.setDvDestino(simulacao.getDv_destino())
-				.setValor(simulacao.getValor())
-				.setTipoTransacao(simulacao.getTipo())
-				.setSenha(simulacao.getSenha())
-				.setIdTransacao(simulacao.getId_tef())
-				.build(); 
-		
-		//envia a mensagem ao kafka
-		kafkaSimulacao.send(topico, efetivaAvro);
 		
 		ResultadoSimulacaoTefDto resultado = new ResultadoSimulacaoTefDto();
 		resultado.setAgencia_destino(simulacao.getAgencia_destino());
@@ -247,11 +248,11 @@ public class TefController {
 			
 			if (!sim.getRc_debito().startsWith("[0]"))
 			{
-				throw new Exception("[-5] falha na consta origem. " + sim.getRc_debito());
+				throw new Exception("[-5] falha na conta origem. " + sim.getRc_debito());
 			}
 			if (!sim.getRc_credito().startsWith("[0]"))
 			{
-				throw new Exception("[-6] falha na consta destino. " + sim.getRc_credito());
+				throw new Exception("[-6] falha na conta destino. " + sim.getRc_credito());
 			}
 			if (!sim.getRc_limite().startsWith("[0]"))
 			{
@@ -267,13 +268,9 @@ public class TefController {
 		catch (Exception e)
 		{
 			sim.setRc_simulacao(e.getMessage());
-			sim.setMsg_simulacao("Timeout, transacao demorou para receber retorno de senha,limmite e conta");
-			sim = repTef.findByTransactionid(idTransacao).get(0);
-			System.out.println("ZZZ001");
-			System.out.println("ZZZ001+" + e.getMessage());
+			sim.setMsg_simulacao("Erro durante simulacao: " + e.getMessage()); 
 		}
 		
-		System.out.println("ZZZ002");
 		repTef.save(sim);
 		//Prepara resultado
 		ResultadoSimulacaoTefDto resultado = new ResultadoSimulacaoTefDto();
@@ -286,7 +283,6 @@ public class TefController {
 		resultado.setTipo_transacao(simulacao.getTipo_transacao());
 		resultado.setValor(simulacao.getValor());
 		resultado.setId_transacao(idTransacao);
-		System.out.println("ZZZ003" + sim.getRc_simulacao());
 		resultado.setResultado(sim.getRc_simulacao());
 		
 		return ResponseEntity.ok(resultado);
@@ -309,12 +305,6 @@ public class TefController {
 		}
 		
 		TefDto ev = lista.get(0);
-		System.out.println("##########################");
-		System.out.println("getRc_credito " + ev.getRc_credito());
-		System.out.println("getRc_debito  " + ev.getRc_debito());
-		System.out.println("getRc_limite  " + ev.getRc_limite());
-		System.out.println("getRc_senha   " + ev.getRc_senha());
-		System.out.println("##########################");
 		
 		if (evento.equalsIgnoreCase("simulacao"))
 		{
@@ -338,7 +328,6 @@ public class TefController {
 	@KafkaListener(topics="limite", groupId = "tef")
 	public void validaLimite(ConsumerRecord<String, Limite> record)
 	{
-		System.out.println("ZZZ001 - limite - tef");
 		Object t1 = record.value();
 		Limite limite = new Gson().fromJson(t1.toString(), Limite.class);
 		
@@ -363,7 +352,6 @@ public class TefController {
 			simulacao.setMsg_limite("Limite insuficiente");
 			simulacao.setRc_limite("[-1] limite insuficiente");
 		}
-		System.out.println("RESPOSTA LIMITE " + simulacao.getRc_limite());
 		repTef.save(simulacao);
 	}
 
@@ -371,7 +359,6 @@ public class TefController {
 	@KafkaListener(topics="conta", groupId = "tef")
 	public void validaConta(ConsumerRecord<String, ContaCorrente> record)
 	{
-		System.out.println("ZZZ001 - conta - tef");
 		Object t1 = record.value();
 		ContaCorrente conta = new Gson().fromJson(t1.toString(), ContaCorrente.class);
 		
@@ -390,7 +377,6 @@ public class TefController {
 		simulacao.setRc_debito(conta.getMotivoContaOrigem());
 		simulacao.setMsg_credito(conta.getMotivoContaDestino());
 		simulacao.setRc_credito(conta.getMotivoContaDestino());
-		System.out.println("RESPOSTA CONTA " + simulacao.getRc_credito() + ", " + simulacao.getRc_debito());
 		repTef.save(simulacao);
 	}
 
@@ -399,13 +385,9 @@ public class TefController {
 	public void validaSenha(ConsumerRecord<String, Senha> record)
 	{
 		Object t1 = record.value();
-		System.out.println("ZZZ001 - senha - tef");
 		Senha senha = new Gson().fromJson(t1.toString(), Senha.class);
-		System.out.println("ZZZ002" + senha);
 		
 		java.util.List<TefDto> lista= repTef.findByTransactionid(senha.getIdSimulacao());
-		System.out.println("ZZZ003" + senha.getIdSimulacao());
-		System.out.println("ZZZ004" + senha.getEvento());
 		
 		//verifica se existe uma simulacao em andamento com esse id
 		if (lista.size()<=0)
@@ -414,7 +396,6 @@ public class TefController {
 		}
 		TefDto simulacao = lista.get(0);
 		
-		System.out.println("ZZZ005"+senha.getAprovado());
 		if (senha.getAprovado())
 		{
 			simulacao.setMsg_senha("Senha correta");
@@ -425,7 +406,6 @@ public class TefController {
 			simulacao.setMsg_senha("Senha inválida");
 			simulacao.setRc_senha("[-1] Senha invalida");
 		}
-		System.out.println("RESPOSTA SENHA " + simulacao.getRc_senha());
 		repTef.save(simulacao);
 		
 	}

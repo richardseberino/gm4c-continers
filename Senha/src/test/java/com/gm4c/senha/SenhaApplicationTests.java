@@ -8,6 +8,7 @@ class SenhaApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("INICIO dos TESTES");
 	}
 
 }
