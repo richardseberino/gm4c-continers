@@ -243,7 +243,7 @@ Ou
 
 git add {diretorio}/src/main/java/com/gm4c/{xxx}/dto/{xxxRepositorio.java}
 
-git commit -am "Alterado"
+git commit -a -m "Alterado"
 
 git push
 
