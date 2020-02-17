@@ -35,3 +35,19 @@ spring:
       keyspace-name: itau
       port: 9042
       schema-action: CREATE_IF_NOT_EXISTS
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true 
+  endpoints:
+      web:
+        exposure:
+          include:
+          - "*"
